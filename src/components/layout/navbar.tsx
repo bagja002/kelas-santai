@@ -24,7 +24,7 @@ import { getCookie, deleteCookie } from "cookies-next";
 import { jwtDecode } from "jwt-decode";
 import axios from "axios";
 import { useRouter } from "next/navigation";
-import { LogOut, User as UserIcon } from "lucide-react";
+import { LogOut, User as UserIcon, ChevronsUpDown } from "lucide-react";
 
 interface UserData {
     id: string;
@@ -211,7 +211,7 @@ export function Navbar() {
                                 <span className="sr-only">Toggle menu</span>
                             </Button>
                         </SheetTrigger>
-                        <SheetContent side="right" className="bg-background">
+                        <SheetContent side="left" className="bg-background">
                             <SheetHeader>
                                 <SheetTitle className="flex items-center gap-2">
                                     <img src="/images/logo-ks.png" alt="Logo" className="h-6 w-6 object-contain" />
@@ -247,16 +247,37 @@ export function Navbar() {
                                 <div className="mt-8 flex flex-col gap-3 px-4">
                                     {isLoggedIn && user ? (
                                         <>
-                                            <div className="flex items-center gap-4 mb-4 p-4 rounded-lg bg-muted/50">
-                                                <Avatar className="h-10 w-10">
-                                                    <AvatarImage src={`https://api.dicebear.com/7.x/avataaars/svg?seed=${user.name}`} />
-                                                    <AvatarFallback>{user.name.charAt(0)}</AvatarFallback>
-                                                </Avatar>
-                                                <div className="flex flex-col">
-                                                    <span className="font-medium">{user.name}</span>
-                                                    <span className="text-xs text-muted-foreground">{user.email}</span>
-                                                </div>
-                                            </div>
+                                            <DropdownMenu>
+                                                <DropdownMenuTrigger asChild>
+                                                    <div className="flex items-center gap-4 mb-4 p-4 rounded-lg bg-muted/50 cursor-pointer active:bg-muted/70 transition-colors">
+                                                        <Avatar className="h-10 w-10">
+                                                            <AvatarImage src={`https://api.dicebear.com/7.x/avataaars/svg?seed=${user.name}`} />
+                                                            <AvatarFallback>{user.name ? user.name.charAt(0).toUpperCase() : "U"}</AvatarFallback>
+                                                        </Avatar>
+                                                        <div className="flex flex-col">
+                                                            <span className="font-medium">{user.name}</span>
+                                                            <span className="text-xs text-muted-foreground">{user.email}</span>
+                                                        </div>
+                                                        <ChevronsUpDown className="ml-auto h-4 w-4 text-muted-foreground" />
+                                                    </div>
+                                                </DropdownMenuTrigger>
+                                                <DropdownMenuContent align="start" className="w-[calc(100vw-4rem)] md:w-56" forceMount>
+                                                    <DropdownMenuLabel>Akun Saya</DropdownMenuLabel>
+                                                    <DropdownMenuSeparator />
+                                                    <DropdownMenuItem className="cursor-pointer" onClick={() => { router.push('/dashboard/settings'); setIsOpen(false); }}>
+                                                        <UserIcon className="mr-2 h-4 w-4" />
+                                                        <span>Profil Saya</span>
+                                                    </DropdownMenuItem>
+                                                    <DropdownMenuItem className="cursor-pointer" onClick={() => { router.push('/cart'); setIsOpen(false); }}>
+                                                        <ShoppingCart className="mr-2 h-4 w-4" />
+                                                        <span>Keranjang Saya</span>
+                                                    </DropdownMenuItem>
+                                                    <DropdownMenuItem className="cursor-pointer" onClick={() => { router.push('/dashboard'); setIsOpen(false); }}>
+                                                        <BookOpen className="mr-2 h-4 w-4" />
+                                                        <span>Dashboard</span>
+                                                    </DropdownMenuItem>
+                                                </DropdownMenuContent>
+                                            </DropdownMenu>
                                             <Button variant="destructive" className="w-full justify-start" onClick={handleLogout}>
                                                 <LogOut className="mr-2 h-4 w-4" />
                                                 Keluar
