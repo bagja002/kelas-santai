@@ -16,6 +16,10 @@ const nextConfig: NextConfig = {
         protocol: "http",
         hostname: "localhost",
       },
+      {
+        protocol: "https",
+        hostname: "be-ks.ikulatluh.cloud",
+      },
     ],
   },
   async headers() {
