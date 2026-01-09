@@ -43,64 +43,18 @@ export default function DashboardPage() {
             try {
                 const apiUrl = process.env.NEXT_PUBLIC_API_URL || "http://localhost:4000/api/v1";
                 // Assuming this endpoint returns active/purchased courses
-                const response = await axios.get(`${apiUrl}/user-courses`, {
+                const response = await axios.get(`${apiUrl}/user-courses/my-courses`, {
                     headers: { Authorization: `Bearer ${token}` }
                 });
 
-                // Mock data for fallback
-                const MOCK_COURSES: UserCourse[] = [
-                    {
-                        id: 1,
-                        course_id: "mock-1",
-                        status: "active",
-                        progress: 65,
-                        course: {
-                            id: "mock-1",
-                            title: "Fullstack Web Development dengan Go & React",
-                            image: "https://images.unsplash.com/photo-1571171637578-41bc2dd41cd2?q=80&w=2600&auto=format&fit=crop",
-                            level: "Intermediate",
-                            mentor_name: "Rizky Hasan"
-                        }
-                    },
-                    {
-                        id: 2,
-                        course_id: "mock-2",
-                        status: "active",
-                        progress: 30,
-                        course: {
-                            id: "mock-2",
-                            title: "UI/UX Design Masterclass: From Zero to Hero",
-                            image: "https://images.unsplash.com/photo-1586717791821-3f44a5638d48?q=80&w=2600&auto=format&fit=crop",
-                            level: "Beginner",
-                            mentor_name: "Sarah Wijaya"
-                        }
-                    }
-                ];
-
-                if (response.data.success && response.data.data && response.data.data.length > 0) {
-                    setCourses(response.data.data);
-                } else {
-                    console.log("Using mock courses data");
-                    setCourses(MOCK_COURSES);
+                if (response.data.success) {
+                    // Set courses to the data array, or empty array if null/undefined
+                    setCourses(response.data.data || []);
                 }
             } catch (err) {
                 console.error("Fetch courses error:", err);
                 // Fallback to mock data on error
-                setCourses([
-                    {
-                        id: 1,
-                        course_id: "mock-1",
-                        status: "active",
-                        progress: 65,
-                        course: {
-                            id: "mock-1",
-                            title: "Fullstack Web Development dengan Go & React",
-                            image: "https://images.unsplash.com/photo-1571171637578-41bc2dd41cd2?q=80&w=2600&auto=format&fit=crop",
-                            level: "Intermediate",
-                            mentor_name: "Rizky Hasan"
-                        }
-                    }
-                ]);
+
             } finally {
                 setIsLoading(false);
             }
@@ -108,6 +62,9 @@ export default function DashboardPage() {
 
         fetchCourses();
     }, []);
+
+    // Filter only courses that have a valid course object attached to them
+    const validCourses = courses.filter(item => item && item.course);
 
     if (isLoading) {
         return (
@@ -132,12 +89,14 @@ export default function DashboardPage() {
 
     return (
         <div className="flex flex-1 flex-col gap-4">
-            <header className="mb-6">
-                <h1 className="text-3xl font-bold mb-2">Kelas Saya</h1>
-                <p className="text-muted-foreground">Lanjutkan pembelajaran Anda dan capai target baru.</p>
-            </header>
+            {validCourses.length > 0 && (
+                <header className="mb-6">
+                    <h1 className="text-3xl font-bold mb-2">Kelas Saya</h1>
+                    <p className="text-muted-foreground">Lanjutkan pembelajaran Anda dan capai target baru.</p>
+                </header>
+            )}
 
-            {courses.length === 0 ? (
+            {validCourses.length === 0 ? (
                 <div className="text-center py-20 bg-secondary/20 rounded-2xl border border-border border-dashed">
                     <div className="bg-background w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-4 border shadow-sm">
                         <BookOpen className="h-8 w-8 text-muted-foreground" />
@@ -146,23 +105,23 @@ export default function DashboardPage() {
                     <p className="text-muted-foreground mb-6 max-w-md mx-auto">
                         Anda belum mendaftar di kelas manapun. Mulai perjalanan belajar Anda sekarang!
                     </p>
-                    <Button onClick={() => router.push("/")} size="lg">
+                    <Button onClick={() => router.push("/courses")} size="lg">
                         Cari Kelas
                     </Button>
                 </div>
             ) : (
                 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-                    {courses.map((item) => (
+                    {validCourses.map((item) => (
                         <Card key={item.id} className="overflow-hidden flex flex-col hover:shadow-lg transition-shadow duration-300">
                             <div className="relative h-48 w-full group">
                                 <img
-                                    src={item.course.picture || item.course.image || "/images/placeholder.png"}
-                                    alt={item.course.title}
+                                    src={item.course?.picture || item.course?.image || "/images/placeholder.png"}
+                                    alt={item.course?.title || "Course detail"}
                                     className="object-cover w-full h-full transition-transform duration-500 group-hover:scale-105"
                                 />
                                 <div className="absolute top-3 right-3">
                                     <Badge variant={item.status === 'active' ? 'default' : 'secondary'} className="capitalize shadow-sm">
-                                        {item.status === 'active' ? 'Aktif' : item.status}
+                                        {item.status === 'active' ? 'Aktif' : (item.status || 'Status')}
                                     </Badge>
                                 </div>
                                 <div className="absolute inset-0 bg-black/20 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-center justify-center">
@@ -170,14 +129,14 @@ export default function DashboardPage() {
                                 </div>
                             </div>
                             <CardHeader className="pb-3">
-                                <div className="text-xs font-medium text-primary mb-1">{item.course.level}</div>
+                                <div className="text-xs font-medium text-primary mb-1">{item.course?.level}</div>
                                 <CardTitle className="text-lg line-clamp-2 leading-tight">
-                                    {item.course.title}
+                                    {item.course?.title}
                                 </CardTitle>
                             </CardHeader>
                             <CardContent className="pb-3 flex-1">
                                 <p className="text-sm text-muted-foreground mb-4">
-                                    Mentor: <span className="font-medium text-foreground">{item.course.mentor_name || item.course.mentor || "Mentor"}</span>
+                                    Mentor: <span className="font-medium text-foreground">{item.course?.mentor_name || item.course?.mentor || "Mentor"}</span>
                                 </p>
 
                                 {/* Progress Bar Placeholder */}
@@ -196,9 +155,9 @@ export default function DashboardPage() {
                             </CardContent>
                             <Separator className="bg-border/50" />
                             <CardFooter className="pt-4 pb-4">
-                                <Button className="w-full" onClick={() => router.push(`/dashboard/learning/${item.course_id}`)}>
+                                {/* <Button className="w-full" onClick={() => router.push(`/dashboard/learning/${item.course_id}`)}>
                                     Lanjut Belajar
-                                </Button>
+                                </Button> */}
                             </CardFooter>
                         </Card>
                     ))}

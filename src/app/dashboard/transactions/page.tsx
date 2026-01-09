@@ -33,48 +33,16 @@ export default function TransactionsPage() {
             try {
                 const apiUrl = process.env.NEXT_PUBLIC_API_URL || "http://localhost:4000/api/v1";
                 // Assuming endpoint
-                const response = await axios.get(`${apiUrl}/orders`, {
+                const response = await axios.get(`${apiUrl}/user-courses/transactions`, {
                     headers: { Authorization: `Bearer ${token}` }
                 });
 
-                // Mock Data
-                const MOCK_TRANSACTIONS: Transaction[] = [
-                    {
-                        id: "INV-20240101-001",
-                        code: "ORDER-101",
-                        amount: 350000,
-                        status: "success",
-                        created_at: new Date().toISOString(),
-                        items: [{ course_title: "Fullstack Web Development", price: 350000 }]
-                    },
-                    {
-                        id: "INV-20240105-002",
-                        code: "ORDER-102",
-                        amount: 150000,
-                        status: "pending",
-                        created_at: new Date(Date.now() - 86400000).toISOString(),
-                        items: [{ course_title: "UI Design Basic", price: 150000 }]
-                    }
-                ];
-
                 if (response.data.success && response.data.data && response.data.data.length > 0) {
                     setTransactions(response.data.data);
-                } else {
-                    setTransactions(MOCK_TRANSACTIONS);
                 }
             } catch (err) {
                 console.error("Fetch transactions error:", err);
                 // Fallback
-                setTransactions([
-                    {
-                        id: "INV-20240101-001",
-                        code: "ORDER-101",
-                        amount: 350000,
-                        status: "success",
-                        created_at: new Date().toISOString(),
-                        items: [{ course_title: "Fullstack Web Development", price: 350000 }]
-                    }
-                ]);
             } finally {
                 setIsLoading(false);
             }

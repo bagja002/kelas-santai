@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
 import { ArrowLeft, Save, Upload, Plus, Trash2 } from "lucide-react";
@@ -11,18 +11,41 @@ import { Textarea } from "@/components/ui/textarea";
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { toast } from "sonner";
-import { MENTORS } from "@/lib/constants";
+import { MENTORS, Mentor } from "@/lib/constants";
 import { getCookie } from "cookies-next";
 import axios from "axios";
 
 interface CurriculumItem {
     name: string;
     description: string;
+    no_urut: number;
 }
 
 export default function CreateCoursePage() {
     const router = useRouter();
     const [isLoading, setIsLoading] = useState(false);
+    const [mentors, setMentors] = useState<Mentor[]>([]);
+
+    useEffect(() => {
+        const fetchMentors = async () => {
+            try {
+                const token = getCookie("admin_token");
+                const apiUrl = process.env.NEXT_PUBLIC_API_URL || "http://localhost:4000/api/v1";
+                const response = await axios.get(`${apiUrl}/mentors`, {
+                    headers: { Authorization: `Bearer ${token}` }
+                });
+
+                // Adjust based on actual response: response.data.data if wrapped
+                const fetchedMentors = response.data.data || response.data;
+                setMentors(Array.isArray(fetchedMentors) ? fetchedMentors : []);
+            } catch (error) {
+                console.error("Failed to fetch mentors:", error);
+                toast.error("Gagal memuat daftar mentor");
+            }
+        };
+
+        fetchMentors();
+    }, []);
 
     // Form States
     const [formData, setFormData] = useState({
@@ -108,7 +131,7 @@ export default function CreateCoursePage() {
 
     const handleSelectChange = (key: string, value: string) => {
         if (key === "mentor_id") {
-            const selectedMentor = MENTORS.find(m => m.id === value);
+            const selectedMentor = mentors.find(m => m.id === value);
             setFormData(prev => ({
                 ...prev,
                 mentor_id: value,
@@ -120,7 +143,7 @@ export default function CreateCoursePage() {
     };
 
     const addCurriculumItem = () => {
-        setCurriculum([...curriculum, { name: "", description: "" }]);
+        setCurriculum([...curriculum, { name: "", description: "", no_urut: 0 }]);
     };
 
     const removeCurriculumItem = (index: number) => {
@@ -130,9 +153,13 @@ export default function CreateCoursePage() {
     };
 
     const handleCurriculumChange = (index: number, field: keyof CurriculumItem, value: string) => {
-        const newCurriculum = [...curriculum];
-        newCurriculum[index][field] = value;
-        setCurriculum(newCurriculum);
+        setCurriculum(prev => prev.map((item, i) => {
+            if (i !== index) return item;
+            return {
+                ...item,
+                [field]: field === "no_urut" ? parseInt(value) || 0 : value
+            };
+        }));
     };
 
     const handleSubmit = async (status: string) => {
@@ -267,7 +294,7 @@ export default function CreateCoursePage() {
                                         <SelectValue placeholder="Pilih Mentor" />
                                     </SelectTrigger>
                                     <SelectContent>
-                                        {MENTORS.map((mentor) => (
+                                        {mentors.map((mentor) => (
                                             <SelectItem key={mentor.id} value={mentor.id}>
                                                 {mentor.name}
                                             </SelectItem>
@@ -389,6 +416,14 @@ export default function CreateCoursePage() {
                                                 value={item.description}
                                                 onChange={(e) => handleCurriculumChange(index, "description", e.target.value)}
                                                 placeholder="Penjelasan singkat materi..."
+                                            />
+                                        </div>
+                                        <div className="space-y-2 md:col-span-2">
+                                            <Label className="text-xs">No Urut</Label>
+                                            <Input
+                                                value={item.no_urut}
+                                                onChange={(e) => handleCurriculumChange(index, "no_urut", e.target.value)}
+                                                placeholder="No urut sesi..."
                                             />
                                         </div>
                                     </div>

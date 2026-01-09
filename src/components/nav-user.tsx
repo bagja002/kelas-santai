@@ -30,8 +30,9 @@ import {
   useSidebar,
 } from "@/components/ui/sidebar"
 import { useRouter } from "next/navigation"
-import { deleteCookie } from "cookies-next"
+import { deleteCookie, getCookie } from "cookies-next"
 import { toast } from "sonner"
+import { jwtDecode } from "jwt-decode"
 
 export function NavUser({
   user,
@@ -45,11 +46,41 @@ export function NavUser({
   const { isMobile } = useSidebar()
   const router = useRouter()
 
+  interface DecodedToken {
+    user_id: string;
+    role: string;
+    exp: number;
+  }
+
+  // Ambil token yang tersedia
+  const token = getCookie("admin_token") || getCookie("token");
+
+  let role = "";
+  let user_id = "";
+
+  if (token) {
+    try {
+      const decoded = jwtDecode<DecodedToken>(token as string);
+      role = decoded.role;
+      user_id = decoded.user_id;
+    } catch (error) {
+      console.error("Error decoding token:", error);
+    }
+  }
+
   const handleLogout = () => {
-    deleteCookie("admin_token");
-    toast.success("Logout Berhasil");
-    router.push("/admin/login");
+    if (role === "admin") {
+      deleteCookie("admin_token");
+      toast.success("Logout Berhasil");
+      router.push("/admin/login");
+    } else {
+      deleteCookie("token");
+      toast.success("Logout Berhasil");
+      router.push("/login");
+    }
   };
+
+
 
   return (
     <SidebarMenu>

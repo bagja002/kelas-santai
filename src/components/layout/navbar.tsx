@@ -64,7 +64,7 @@ export function Navbar() {
                     // Fetch user details
                     const apiUrl = process.env.NEXT_PUBLIC_API_URL || "http://localhost:4000/api/v1";
                     try {
-                        const response = await axios.get(`${apiUrl}/users/${decoded.user_id}`, {
+                        const response = await axios.get(`${apiUrl}/users/getById`, {
                             headers: {
                                 Authorization: `Bearer ${token}`,
                             },

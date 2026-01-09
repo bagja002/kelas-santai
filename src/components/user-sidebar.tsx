@@ -55,7 +55,17 @@ const data = {
     ],
 }
 
-export function UserSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
+interface UserSidebarProps extends React.ComponentProps<typeof Sidebar> {
+    dataUser: {
+        name: string;
+        email: string;
+        avatar: string;
+    } | null;
+}
+
+export function UserSidebar({ dataUser, ...props }: UserSidebarProps) {
+    // Fallback if dataUser is not provided
+    const user = dataUser || data.user;
     return (
         <Sidebar
             className="top-(--header-height) h-[calc(100svh-var(--header-height))]!"
@@ -82,7 +92,7 @@ export function UserSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) 
                 <NavMain items={data.navMain} />
             </SidebarContent>
             <SidebarFooter>
-                <NavUser user={data.user} />
+                <NavUser user={user} />
             </SidebarFooter>
         </Sidebar>
     )
