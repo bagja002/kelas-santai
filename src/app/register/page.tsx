@@ -136,14 +136,14 @@ export default function RegisterPage() {
                     </CardDescription>
                 </CardHeader>
                 <CardContent className="grid gap-4">
-                    <div className="grid grid-cols-2 gap-6">
+                    {/* <div className="grid grid-cols-2 gap-6">
                         <Button variant="outline" className="w-full">
                             Google
                         </Button>
                         <Button variant="outline" className="w-full">
                             Github
                         </Button>
-                    </div>
+                    </div> */}
                     <div className="relative">
                         <div className="absolute inset-0 flex items-center">
                             <span className="w-full border-t" />
