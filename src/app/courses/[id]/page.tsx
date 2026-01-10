@@ -269,7 +269,7 @@ export default function CourseDetailPage() {
                                 <span className="text-3xl md:text-4xl font-bold text-primary">{formatPrice(course.price)}</span>
                                 {course.price > 0 && (
                                     <p className="text-sm text-muted-foreground mt-1 line-through decoration-destructive/50">
-                                        {formatPrice(course.price * 1.5)}
+                                        {formatPrice(course.price * 2.5)}
                                     </p>
                                 )}
                             </div>
