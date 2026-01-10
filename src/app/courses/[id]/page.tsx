@@ -33,7 +33,13 @@ export default function CourseDetailPage() {
                 const response = await axios.get(`${apiUrl}/courses/${id}`);
 
                 if (response.data.success) {
-                    setCourse(response.data.data);
+
+                    const courseData = response.data.data;
+                    // Sort kurikulum berdasarkan no_urut
+                    if (courseData.curiculum && courseData.curiculum.length > 0) {
+                        courseData.curiculum.sort((a: any, b: any) => a.no_urut - b.no_urut);
+                    }
+                    setCourse(courseData);
                 } else {
                     toast.error(response.data.message || "Gagal memuat detail kelas");
                 }
@@ -220,7 +226,7 @@ export default function CourseDetailPage() {
                                     {course.curiculum.map((item, i) => (
                                         <div key={item.id || i} className="flex gap-4 p-4 rounded-xl border border-border/50 bg-card hover:bg-secondary/10 transition-colors">
                                             <div className="flex z-10 h-8 w-8 shrink-0 items-center justify-center rounded-full bg-primary text-xs font-bold text-white ring-4 ring-background">
-                                                {i + 1}
+                                                {item.no_urut}
                                             </div>
                                             <div className="space-y-1">
                                                 <h3 className="font-semibold leading-none">{item.name}</h3>
