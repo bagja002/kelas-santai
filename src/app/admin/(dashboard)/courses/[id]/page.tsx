@@ -33,7 +33,11 @@ export default function AdminCourseDetailPage() {
                 });
 
                 if (response.data.success) {
-                    setCourse(response.data.data);
+                    const courseData = response.data.data;
+                    if (courseData.curiculum && courseData.curiculum.length > 0) {
+                        courseData.curiculum.sort((a: any, b: any) => a.no_urut - b.no_urut);
+                    }
+                    setCourse(courseData);
                 } else {
                     toast.error(response.data.message || "Gagal memuat detail kelas");
                 }
