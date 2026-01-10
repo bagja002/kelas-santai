@@ -4,6 +4,7 @@ export interface Curiculum {
     course_id: string; // uuid
     name: string;
     description: string;
+    no_urut: number;
     created_at?: string;
     updated_at?: string;
 }
@@ -96,31 +97,36 @@ export const COURSES: Course[] = [
                 id: "c1",
                 course_id: "9a537bca-6e86-4bad-a4f6-b0b3c69010ba",
                 name: "Introduction to React",
-                description: "Understanding Components, JSX, and Props"
+                description: "Understanding Components, JSX, and Props",
+                no_urut: 1,
             },
             {
                 id: "c2",
                 course_id: "9a537bca-6e86-4bad-a4f6-b0b3c69010ba",
                 name: "Hooks Deep Dive",
-                description: "useState, useEffect, and Custom Hooks"
+                description: "useState, useEffect, and Custom Hooks",
+                no_urut: 2,
             },
             {
                 id: "c3",
                 course_id: "9a537bca-6e86-4bad-a4f6-b0b3c69010ba",
                 name: "Next.js Fundamentals",
-                description: "App Router, Pages, and Layouts"
+                description: "App Router, Pages, and Layouts",
+                no_urut: 3,
             },
             {
                 id: "c4",
                 course_id: "9a537bca-6e86-4bad-a4f6-b0b3c69010ba",
                 name: "Server Components & Actions",
-                description: "Data fetching and server-side logic"
+                description: "Data fetching and server-side logic",
+                no_urut: 4,
             },
             {
                 id: "c5",
                 course_id: "9a537bca-6e86-4bad-a4f6-b0b3c69010ba",
                 name: "Deployment & Optimization",
-                description: "Vercel deployment, caching, and performance"
+                description: "Vercel deployment, caching, and performance",
+                no_urut: 5,
             }
         ]
     },
@@ -148,31 +154,43 @@ export const COURSES: Course[] = [
                 id: "u1",
                 course_id: "2",
                 name: "Introduction to UI/UX",
-                description: "Difference between UI and UX, Design Principles"
+                description: "Difference between UI and UX, Design Principles",
+                no_urut: 1,
             },
             {
                 id: "u2",
                 course_id: "2",
                 name: "User Research & Persona",
-                description: "Understanding user needs and creating personas"
+                description: "Understanding user needs and creating personas",
+                no_urut: 2,
             },
             {
                 id: "u3",
                 course_id: "2",
                 name: "Wireframing & Prototyping",
-                description: "Low-fidelity wireframes to interactive prototypes"
+                description: "Low-fidelity wireframes to interactive prototypes",
+                no_urut: 3,
             },
             {
                 id: "u4",
                 course_id: "2",
                 name: "Figma Mastery",
-                description: "Auto-layout, Components, and Variants"
+                description: "Auto-layout, Components, and Variants",
+                no_urut: 4,
+            },
+            {
+                id: "u4",
+                course_id: "2",
+                name: "Figma Mastery",
+                description: "Auto-layout, Components, and Variants",
+                no_urut: 5,
             },
             {
                 id: "u5",
                 course_id: "2",
                 name: "Design Systems",
-                description: "Creating and maintaining consistent design languages"
+                description: "Creating and maintaining consistent design languages",
+                no_urut: 6,
             }
         ]
     },
@@ -200,31 +218,36 @@ export const COURSES: Course[] = [
                 id: "m1",
                 course_id: "3",
                 name: "Digital Marketing Strategy",
-                description: "Funnel marketing and customer journey"
+                description: "Funnel marketing and customer journey",
+                no_urut: 1,
             },
             {
                 id: "m2",
                 course_id: "3",
                 name: "SEO Fundamentals",
-                description: "On-page and Off-page optimization"
+                description: "On-page and Off-page optimization",
+                no_urut: 2,
             },
             {
                 id: "m3",
                 course_id: "3",
                 name: "Social Media Marketing",
-                description: "Content planning for Instagram and TikTok"
+                description: "Content planning for Instagram and TikTok",
+                no_urut: 3,
             },
             {
                 id: "m4",
                 course_id: "3",
                 name: "Paid Advertising (Ads)",
-                description: "Facebook Ads and Google Ads basics"
+                description: "Facebook Ads and Google Ads basics",
+                no_urut: 4,
             },
             {
                 id: "m5",
                 course_id: "3",
                 name: "Analytics & Reporting",
-                description: "Reading data to make business decisions"
+                description: "Reading data to make business decisions",
+                no_urut: 5,
             }
         ]
     },
@@ -252,31 +275,36 @@ export const COURSES: Course[] = [
                 id: "p1",
                 course_id: "4",
                 name: "Python Fundamentals",
-                description: "Syntax, Data Structures, and Algorithms"
+                description: "Syntax, Data Structures, and Algorithms",
+                no_urut: 1,
             },
             {
                 id: "p2",
                 course_id: "4",
                 name: "Object-Oriented Programming",
-                description: "Classes, Inheritance, and Polymorphism"
+                description: "Classes, Inheritance, and Polymorphism",
+                no_urut: 2,
             },
             {
                 id: "p3",
                 course_id: "4",
                 name: "Web Development with Django",
-                description: "MVT Architecture, ORM, and Admin Panel"
+                description: "MVT Architecture, ORM, and Admin Panel",
+                no_urut: 3,
             },
             {
                 id: "p4",
                 course_id: "4",
                 name: "High Performance APIs with FastAPI",
-                description: "Async/Await, Pydantic, and automatic docs"
+                description: "Async/Await, Pydantic, and automatic docs",
+                no_urut: 4,
             },
             {
                 id: "p5",
                 course_id: "4",
                 name: "Deployment & CI/CD",
-                description: "Docker, PostgreSQL, and Cloud Deployment"
+                description: "Docker, PostgreSQL, and Cloud Deployment",
+                no_urut: 5,
             }
         ]
     }

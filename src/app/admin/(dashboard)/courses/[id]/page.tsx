@@ -166,7 +166,7 @@ export default function AdminCourseDetailPage() {
                                     {course.curiculum.map((item, index) => (
                                         <div key={item.id} className="flex gap-4 p-4 rounded-lg border bg-card hover:bg-accent/5 transition-colors">
                                             <div className="flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-primary/10 text-primary text-xs font-bold">
-                                                {index + 1}
+                                                {item.no_urut}
                                             </div>
                                             <div className="space-y-1">
                                                 <h4 className="font-semibold text-sm leading-none">{item.name}</h4>
